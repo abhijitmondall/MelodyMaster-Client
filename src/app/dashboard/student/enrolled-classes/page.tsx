@@ -20,10 +20,11 @@ export default function EnrolledClassesPage() {
   });
 
   const enrolledClasses = data?.data ?? [];
+  const paidEnrollments = enrolledClasses.filter((e) => e.status === "Paid");
 
   const totalSpent =
-    enrolledClasses.length > 0
-      ? enrolledClasses?.reduce((s, e) => s + e.price, 0)
+    paidEnrollments.length > 0
+      ? paidEnrollments.reduce((s, e) => s + e.price, 0)
       : 0;
 
   return (
@@ -58,7 +59,7 @@ export default function EnrolledClassesPage() {
             </Card>
           ))}
         </div>
-      ) : enrolledClasses.length === 0 ? (
+      ) : paidEnrollments.length === 0 ? (
         <Card className="text-center py-20">
           <CardContent>
             <GraduationCap className="h-14 w-14 text-muted-foreground/20 mx-auto mb-4" />
@@ -70,72 +71,71 @@ export default function EnrolledClassesPage() {
         </Card>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {enrolledClasses.length > 0 &&
-            enrolledClasses?.map((eu) => (
-              <Card
-                key={eu.id}
-                className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
-              >
-                {/* Class image */}
-                <div className="relative h-44 bg-gradient-to-br from-teal-50 to-emerald-100 overflow-hidden">
-                  {eu.classImage ? (
-                    <Image
-                      src={eu.classImage}
-                      alt={eu.className}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <BookOpen className="h-12 w-12 text-primary/20" />
-                    </div>
-                  )}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                  <div className="absolute bottom-3 left-3">
-                    <Badge variant="success" className="text-xs shadow-sm">
-                      {eu.status}
-                    </Badge>
+          {paidEnrollments.map((eu) => (
+            <Card
+              key={eu.id}
+              className="group overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            >
+              {/* Class image */}
+              <div className="relative h-44 bg-gradient-to-br from-teal-50 to-emerald-100 overflow-hidden">
+                {eu.classImage ? (
+                  <Image
+                    src={eu.classImage}
+                    alt={eu.className}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                ) : (
+                  <div className="flex h-full items-center justify-center">
+                    <BookOpen className="h-12 w-12 text-primary/20" />
                   </div>
+                )}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                <div className="absolute bottom-3 left-3">
+                  <Badge variant="success" className="text-xs shadow-sm">
+                    {eu.status}
+                  </Badge>
+                </div>
+              </div>
+
+              <CardContent className="p-5 space-y-4">
+                <div>
+                  <h3 className="font-bold text-base leading-snug">
+                    {eu.className}
+                  </h3>
+                  {eu.userName && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {eu.userName}
+                    </p>
+                  )}
                 </div>
 
-                <CardContent className="p-5 space-y-4">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
+                  <span>Enrolled {formatDate(eu.createdAt)}</span>
+                </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-border">
                   <div>
-                    <h3 className="font-bold text-base leading-snug">
-                      {eu.className}
-                    </h3>
-                    {eu.userName && (
-                      <p className="text-xs text-muted-foreground mt-1">
-                        {eu.userName}
-                      </p>
-                    )}
+                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                      Paid
+                    </p>
+                    <p className="text-lg font-black text-primary">
+                      {formatPrice(eu.price)}
+                    </p>
                   </div>
-
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400" />
-                    <span>Enrolled {formatDate(eu.createdAt)}</span>
+                  <div className="text-right">
+                    <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
+                      Transaction
+                    </p>
+                    <p className="text-xs font-mono text-muted-foreground truncate max-w-[100px]">
+                      {eu.transactionId}
+                    </p>
                   </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-border">
-                    <div>
-                      <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
-                        Paid
-                      </p>
-                      <p className="text-lg font-black text-primary">
-                        {formatPrice(eu.price)}
-                      </p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
-                        Transaction
-                      </p>
-                      <p className="text-xs font-mono text-muted-foreground truncate max-w-[100px]">
-                        {eu.transactionId}
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
     </div>

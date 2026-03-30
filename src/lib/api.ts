@@ -22,11 +22,17 @@ import type {
 // ── Auth ──────────────────────────────────────────────────────────────────────
 export const authApi = {
   signup: async (payload: SignupPayload) => {
-    const { data } = await api.post<ApiResponse<AuthResponse>>("/auth/signup", payload);
+    const { data } = await api.post<ApiResponse<AuthResponse>>(
+      "/auth/signup",
+      payload,
+    );
     return data.data!;
   },
   signin: async (payload: SigninPayload) => {
-    const { data } = await api.post<ApiResponse<AuthResponse>>("/auth/signin", payload);
+    const { data } = await api.post<ApiResponse<AuthResponse>>(
+      "/auth/signin",
+      payload,
+    );
     return data.data!;
   },
   me: async () => {
@@ -38,7 +44,10 @@ export const authApi = {
     return data.data!;
   },
   changePassword: async (payload: ChangePasswordPayload) => {
-    const { data } = await api.patch<ApiResponse<User>>("/auth/me/change-password", payload);
+    const { data } = await api.patch<ApiResponse<User>>(
+      "/auth/me/change-password",
+      payload,
+    );
     return data.data!;
   },
   signout: async (refreshToken: string) => {
@@ -59,7 +68,9 @@ export const classesApi = {
     if (query?.page) params.set("page", String(query.page));
     if (query?.limit) params.set("limit", String(query.limit));
     const qs = params.toString();
-    const { data } = await api.get<ListResponse<Class[]>>(`/classes${qs ? `?${qs}` : ""}`);
+    const { data } = await api.get<ListResponse<Class[]>>(
+      `/classes${qs ? `?${qs}` : ""}`,
+    );
     return data;
   },
   getById: async (id: string) => {
@@ -70,8 +81,17 @@ export const classesApi = {
     const { data } = await api.post<ApiResponse<Class>>("/classes", payload);
     return data.data!;
   },
-  update: async (id: string, payload: Partial<CreateClassPayload> & { status?: string; feedback?: string }) => {
-    const { data } = await api.patch<ApiResponse<Class>>(`/classes/${id}`, payload);
+  update: async (
+    id: string,
+    payload: Partial<CreateClassPayload> & {
+      status?: string;
+      feedback?: string;
+    },
+  ) => {
+    const { data } = await api.patch<ApiResponse<Class>>(
+      `/classes/${id}`,
+      payload,
+    );
     return data.data!;
   },
   delete: async (id: string) => {
@@ -88,7 +108,9 @@ export const usersApi = {
     if (query?.page) params.set("page", String(query.page));
     if (query?.limit) params.set("limit", String(query.limit));
     const qs = params.toString();
-    const { data } = await api.get<ListResponse<User[]>>(`/users${qs ? `?${qs}` : ""}`);
+    const { data } = await api.get<ListResponse<User[]>>(
+      `/users${qs ? `?${qs}` : ""}`,
+    );
     return data;
   },
   getById: async (id: string) => {
@@ -97,11 +119,16 @@ export const usersApi = {
   },
   getInstructors: async (limit?: number) => {
     const qs = limit ? `?limit=${limit}` : "";
-    const { data } = await api.get<ApiResponse<User[]>>(`/users/instructors${qs}`);
+    const { data } = await api.get<ApiResponse<User[]>>(
+      `/users/instructors${qs}`,
+    );
     return data.data ?? [];
   },
   update: async (id: string, payload: Partial<User>) => {
-    const { data } = await api.patch<ApiResponse<User>>(`/users/${id}`, payload);
+    const { data } = await api.patch<ApiResponse<User>>(
+      `/users/${id}`,
+      payload,
+    );
     return data.data!;
   },
   delete: async (id: string) => {
@@ -113,7 +140,9 @@ export const usersApi = {
 export const selectedClassesApi = {
   getAll: async (userEmail?: string) => {
     const qs = userEmail ? `?userEmail=${encodeURIComponent(userEmail)}` : "";
-    const { data } = await api.get<ListResponse<SelectedClass[]>>(`/selectedClasses${qs}`);
+    const { data } = await api.get<ListResponse<SelectedClass[]>>(
+      `/selectedClasses${qs}`,
+    );
     return data;
   },
   create: async (payload: {
@@ -125,7 +154,10 @@ export const selectedClassesApi = {
     price: number;
     enrolledStudents?: number;
   }) => {
-    const { data } = await api.post<ApiResponse<SelectedClass>>("/selectedClasses", payload);
+    const { data } = await api.post<ApiResponse<SelectedClass>>(
+      "/selectedClasses",
+      payload,
+    );
     return data.data!;
   },
   delete: async (id: string) => {
@@ -137,7 +169,9 @@ export const selectedClassesApi = {
 export const enrolledUsersApi = {
   getAll: async (email?: string) => {
     const qs = email ? `?email=${encodeURIComponent(email)}` : "";
-    const { data } = await api.get<ListResponse<EnrolledUser[]>>(`/enrolledUsers${qs}`);
+    const { data } = await api.get<ListResponse<EnrolledUser[]>>(
+      `/enrolledUsers${qs}`,
+    );
     return data;
   },
 };
@@ -154,9 +188,22 @@ export const paymentApi = {
   },
 
   // New: Stripe Checkout Session — returns { paymentUrl, enrollmentId }
-  createCheckout: async (selectedClassId: string): Promise<CheckoutSessionResponse> => {
+  createCheckout: async (
+    selectedClassId: string,
+  ): Promise<CheckoutSessionResponse> => {
     const { data } = await api.post<ApiResponse<CheckoutSessionResponse>>(
       "/payment/checkout",
+      { selectedClassId },
+    );
+    return data.data!;
+  },
+
+  // Cleanup pending enrollment after user cancels Stripe
+  cancelCheckout: async (
+    selectedClassId: string,
+  ): Promise<{ deleted: number }> => {
+    const { data } = await api.post<ApiResponse<{ deleted: number }>>(
+      "/payment/cancel",
       { selectedClassId },
     );
     return data.data!;

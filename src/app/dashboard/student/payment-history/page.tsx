@@ -18,7 +18,9 @@ export default function PaymentHistoryPage() {
     enabled: !!user?.email,
   });
 
-  const payments = Array.isArray(data?.data) ? data.data : [];
+  const payments = Array.isArray(data?.data)
+    ? data.data.filter((p) => p.status === "Paid")
+    : [];
   const totalSpent = payments.reduce((s, p) => s + (p?.price ?? 0), 0);
   const avgPayment = payments.length ? totalSpent / payments.length : 0;
 

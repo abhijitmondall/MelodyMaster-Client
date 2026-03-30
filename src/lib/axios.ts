@@ -3,7 +3,8 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from "axios";
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:5000/api/v1";
+  process.env.NEXT_PUBLIC_API_URL ??
+  "https://melodymaster-api.vercel.app/api/v1";
 
 // ── Main API instance ─────────────────────────────────────────────────────────
 export const api = axios.create({

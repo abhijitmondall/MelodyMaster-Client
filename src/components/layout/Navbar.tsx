@@ -61,7 +61,7 @@ export default function Navbar() {
     },
     enabled: searchQuery.trim().length >= 2,
     staleTime: 1000 * 60,
-    keepPreviousData: true,
+    placeholderData: (previousData) => previousData,
   });
 
   const handleSearch = (e: React.FormEvent) => {

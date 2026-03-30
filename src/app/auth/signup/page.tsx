@@ -239,7 +239,7 @@ export default function SignupPage() {
                 {([isSubmitting]) => (
                   <Button
                     type="submit"
-                    className="w-full mt-2"
+                    className="w-full mt-2 cursor-pointer"
                     disabled={isSubmitting}
                   >
                     {isSubmitting ? (

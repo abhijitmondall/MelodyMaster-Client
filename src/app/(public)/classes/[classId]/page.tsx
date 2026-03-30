@@ -426,7 +426,7 @@ export default function ClassDetailsPage() {
                 ) : (
                   <>
                     <Button
-                      className="w-full rounded-xl"
+                      className="w-full rounded-xl cursor-pointer"
                       onClick={handleSelect}
                       disabled={
                         cls.status !== "Approved" ||
@@ -438,7 +438,7 @@ export default function ClassDetailsPage() {
                     </Button>
 
                     <Button
-                      className="w-full rounded-xl"
+                      className="w-full rounded-xl cursor-pointer"
                       variant="outline"
                       onClick={handlePayNow}
                       disabled={

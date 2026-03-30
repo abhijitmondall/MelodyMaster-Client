@@ -154,7 +154,7 @@ export default function ClassCard({
                 }
                 disabled={isFull || isEnrolled || cls.status !== "Approved"}
                 onClick={() => onSelect?.(cls)}
-                className="rounded-lg font-semibold text-xs"
+                className="rounded-lg font-semibold text-xs cursor-pointer"
               >
                 {isEnrolled ? "Enrolled" : isSelected ? "Selected" : "Select"}
               </Button>

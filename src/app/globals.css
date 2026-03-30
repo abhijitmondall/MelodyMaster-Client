@@ -83,6 +83,25 @@
   outline-offset: 2px;
 }
 
+body {
+  background: linear-gradient(145deg, #f8fafc, #eaf9f6, #fefefe);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in,
+  .animate-appears,
+  .hover-float {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 button,
 input,
 select,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Search, SlidersHorizontal } from "lucide-react";
 import { useToast } from "@/components/ui/toast";
@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useAuthStore } from "@/stores/authStore";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { Class } from "@/types";
 
 export default function ClassesPage() {
@@ -28,6 +28,14 @@ export default function ClassesPage() {
 
   const { user, isAuthenticated } = useAuthStore();
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const searchParam = searchParams.get("search");
+    if (searchParam) {
+      setSearch(searchParam);
+    }
+  }, [searchParams]);
   const qc = useQueryClient();
 
   const { data, isLoading } = useQuery({
@@ -106,33 +114,53 @@ export default function ClassesPage() {
         tag="All Courses"
         title="Explore Our Classes"
         subtitle="Browse through all available music courses and find the perfect fit for your journey."
-        className="mb-10"
+        className="mb-12"
       />
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-8">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search classes…"
-            className="pl-10"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
+      {/* Filters Section */}
+      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8">
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4">
+          <div className="w-full lg:flex-1">
+            <label htmlFor="class-search" className="sr-only">
+              Search classes
+            </label>
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground h-5 w-5" />
+              <Input
+                id="class-search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search classes, instructors, genres..."
+                className="pl-10 h-11 text-base"
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    router.push(
+                      `/classes${
+                        search.trim()
+                          ? `?search=${encodeURIComponent(search.trim())}`
+                          : ""
+                      }`,
+                    );
+                  }
+                }}
+              />
+            </div>
+          </div>
+
+          <Select value={sort} onValueChange={setSort}>
+            <SelectTrigger className="w-full lg:w-56 h-11">
+              <SlidersHorizontal className="h-4 w-4 mr-2 text-muted-foreground" />
+              <SelectValue placeholder="Sort by" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="-enrolledStudents">Most Popular</SelectItem>
+              <SelectItem value="-ratings">Highest Rated</SelectItem>
+              <SelectItem value="price">Price: Low to High</SelectItem>
+              <SelectItem value="-price">Price: High to Low</SelectItem>
+              <SelectItem value="-createdAt">Newest</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
-        <Select value={sort} onValueChange={setSort}>
-          <SelectTrigger className="w-full sm:w-48">
-            <SlidersHorizontal className="h-4 w-4 mr-2 text-muted-foreground" />
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="-enrolledStudents">Most Popular</SelectItem>
-            <SelectItem value="-ratings">Highest Rated</SelectItem>
-            <SelectItem value="price">Price: Low to High</SelectItem>
-            <SelectItem value="-price">Price: High to Low</SelectItem>
-            <SelectItem value="-createdAt">Newest</SelectItem>
-          </SelectContent>
-        </Select>
       </div>
 
       {/* Results count */}

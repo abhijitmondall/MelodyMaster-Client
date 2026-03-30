@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 import {
@@ -13,6 +13,7 @@ import {
   ChevronDown,
   Search,
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -25,6 +26,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuthStore } from "@/stores/authStore";
 import { getInitials, cn } from "@/lib/utils";
+import { classesApi } from "@/lib/api";
+import type { Class } from "@/types";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -44,8 +47,26 @@ export default function Navbar() {
     router.push("/");
   };
 
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const { data: suggestions = [], isFetching } = useQuery({
+    queryKey: ["global-class-search", searchQuery],
+    queryFn: async () => {
+      const response = await classesApi.getAll({
+        search: searchQuery.trim(),
+        status: "Approved",
+        limit: 5,
+      });
+      return response.data ?? [];
+    },
+    enabled: searchQuery.trim().length >= 2,
+    staleTime: 1000 * 60,
+    keepPreviousData: true,
+  });
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    setShowSuggestions(false);
     if (searchQuery.trim()) {
       router.push(`/classes?search=${encodeURIComponent(searchQuery.trim())}`);
     }
@@ -82,7 +103,73 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
+        {/* Global search */}
+        <form
+          onSubmit={handleSearch}
+          className="hidden md:flex relative items-center flex-1 max-w-md mx-4"
+        >
+          <div className="relative w-full">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search classes..."
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(searchQuery.trim().length >= 2)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSearch(e as any);
+                }
+              }}
+              className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 bg-slate-50 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 focus:bg-white transition-all duration-150"
+            />
+          </div>
 
+          {showSuggestions && searchQuery.trim().length >= 2 && (
+            <div className="absolute top-12 left-0 right-0 z-50 mt-1 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
+              {isFetching && (
+                <p className="text-sm text-slate-500 py-2">Searching...</p>
+              )}
+              {!isFetching && suggestions.length === 0 && (
+                <p className="text-sm text-slate-500 py-2">No results found</p>
+              )}
+              <div className="space-y-1">
+                {suggestions.slice(0, 5).map((cls: Class) => (
+                  <button
+                    key={cls.id}
+                    type="button"
+                    onMouseDown={() => {
+                      router.push(`/classes/${cls.id}`);
+                      setShowSuggestions(false);
+                    }}
+                    className="flex items-center justify-between w-full text-left rounded-lg px-3 py-2 text-sm text-slate-700 hover:bg-slate-100"
+                  >
+                    <span className="truncate">{cls.className}</span>
+                    <span className="text-xs text-slate-400">{cls.price}$</span>
+                  </button>
+                ))}
+              </div>
+              {suggestions.length > 0 && (
+                <button
+                  type="button"
+                  onMouseDown={() => {
+                    router.push(
+                      `/classes?search=${encodeURIComponent(searchQuery.trim())}`,
+                    );
+                    setShowSuggestions(false);
+                  }}
+                  className="mt-2 w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-center text-xs font-semibold text-slate-700 hover:bg-slate-100"
+                >
+                  View all
+                </button>
+              )}
+            </div>
+          )}
+        </form>
         {/* Right side */}
         <div className="flex items-center gap-3">
           {isAuthenticated && user ? (
@@ -183,6 +270,27 @@ export default function Navbar() {
                 {label}
               </Link>
             ))}
+
+            {/* Mobile search */}
+            <form onSubmit={handleSearch} className="mt-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input
+                  type="text"
+                  placeholder="Search classes..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-border bg-background text-sm placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              </div>
+              <Button
+                type="submit"
+                size="sm"
+                className="w-full mt-2 rounded-lg"
+              >
+                Search
+              </Button>
+            </form>
           </nav>
         </div>
       )}

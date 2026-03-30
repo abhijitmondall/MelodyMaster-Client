@@ -19,14 +19,14 @@ export default function HeroSection() {
         <div className="absolute bottom-10 right-1/3 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
       </div>
 
-      <div className="relative container mx-auto py-20 md:py-28">
+      <div className="relative container mx-auto py-24 md:py-28">
         <motion.div
-          className="mx-auto max-w-2xl text-center space-y-8"
-          initial={{ opacity: 0, y: 15 }}
+          className="mx-auto max-w-3xl text-center space-y-8"
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.7, ease: "easeOut" }}
         >
-          <p className="inline-flex items-center justify-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition-smooth hover:scale-105">
+          <p className="inline-flex items-center justify-center gap-2 rounded-full bg-teal-100/80 px-4 py-2 text-sm font-semibold text-teal-600 shadow-sm">
             <Music className="h-4 w-4" />
             Trusted by students worldwide
           </p>

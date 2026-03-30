@@ -11,9 +11,21 @@ const features = [
 ];
 
 const values = [
-  { icon: Music, title: "Passion-First", desc: "Music is more than notes — it is emotion, culture, and expression." },
-  { icon: Target, title: "Goal-Oriented", desc: "Clear milestones so you always know where you are heading." },
-  { icon: Heart, title: "Community-Driven", desc: "A supportive environment where every student thrives together." },
+  {
+    icon: Music,
+    title: "Passion-First",
+    desc: "Music is more than notes — it is emotion, culture, and expression.",
+  },
+  {
+    icon: Target,
+    title: "Goal-Oriented",
+    desc: "Clear milestones so you always know where you are heading.",
+  },
+  {
+    icon: Heart,
+    title: "Community-Driven",
+    desc: "A supportive environment where every student thrives together.",
+  },
 ];
 
 export default function AboutUs() {
@@ -43,13 +55,16 @@ export default function AboutUs() {
           {/* Right */}
           <div className="grid grid-cols-1 gap-4">
             {values.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="flex items-start gap-4 p-5 rounded-2xl border bg-card hover:shadow-md transition-shadow">
+              <div
+                key={title}
+                className="group flex items-start gap-4 p-5 rounded-2xl border border-slate-200 bg-white shadow-sm hover-float animate-fade-in"
+              >
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary/10">
                   <Icon className="h-6 w-6 text-primary" />
                 </div>
                 <div>
-                  <h3 className="font-bold">{title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1">{desc}</p>
+                  <h3 className="font-semibold text-slate-900">{title}</h3>
+                  <p className="text-sm text-slate-500 mt-1">{desc}</p>
                 </div>
               </div>
             ))}

@@ -12,11 +12,16 @@ import { Button } from "@/components/ui/button";
 export default function PopularClasses() {
   const { data, isLoading } = useQuery({
     queryKey: ["popular-classes"],
-    queryFn: () => classesApi.getAll({ status: "Approved", sort: "-enrolledStudents", limit: 6 }),
+    queryFn: () =>
+      classesApi.getAll({
+        status: "Approved",
+        sort: "-enrolledStudents",
+        limit: 6,
+      }),
   });
 
   return (
-    <section className="py-24 bg-muted/30">
+    <section className="py-24 bg-white">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
           <SectionTitle
@@ -26,14 +31,19 @@ export default function PopularClasses() {
             subtitle="Discover our most-loved music courses taught by expert instructors."
           />
           <Button variant="outline" asChild className="rounded-xl shrink-0">
-            <Link href="/classes">View All Classes <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Link href="/classes">
+              View All Classes <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {isLoading
             ? Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="rounded-2xl overflow-hidden">
+                <div
+                  key={i}
+                  className="rounded-2xl overflow-hidden animate-shimmer"
+                >
                   <Skeleton className="h-48 rounded-none" />
                   <div className="p-5 space-y-3">
                     <Skeleton className="h-5 w-3/4" />
@@ -42,9 +52,9 @@ export default function PopularClasses() {
                   </div>
                 </div>
               ))
-            : data?.data?.slice(0, 6).map((cls) => (
-                <ClassCard key={cls.id} cls={cls} />
-              ))}
+            : data?.data
+                ?.slice(0, 6)
+                .map((cls) => <ClassCard key={cls.id} cls={cls} />)}
         </div>
       </div>
     </section>

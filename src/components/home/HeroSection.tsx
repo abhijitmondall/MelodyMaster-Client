@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import { ArrowRight, Music, Star, Users, BookOpen } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const stats = [
@@ -10,62 +13,67 @@ const stats = [
 
 export default function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 text-white">
-      {/* Background decoration */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 h-96 w-96 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-96 w-96 rounded-full bg-teal-400/10 blur-3xl" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[600px] w-[600px] rounded-full bg-primary/5 blur-3xl" />
+    <section className="relative overflow-hidden bg-white text-slate-900">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-8 left-1/2 h-72 w-72 -translate-x-1/2 rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute bottom-10 right-1/3 h-64 w-64 rounded-full bg-accent/10 blur-3xl" />
       </div>
 
-      <div className="relative container mx-auto px-4 lg:px-8 py-28 md:py-36">
-        <div className="max-w-3xl mx-auto text-center space-y-8">
-          {/* Tag */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm font-semibold backdrop-blur-sm">
-            <Music className="h-4 w-4 text-teal-400" />
-            <span>World-Class Music Education</span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="text-5xl md:text-7xl font-black tracking-tight leading-none">
-            Experience the{" "}
-            <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
-              Magic
-            </span>{" "}
-            of Music
-          </h1>
-
-          <p className="text-lg md:text-xl text-slate-300 leading-relaxed max-w-xl mx-auto">
-            Unlock your musical potential with MelodyMasters. Learn from world-class instructors and discover your unique sound.
+      <div className="relative container mx-auto py-20 md:py-28">
+        <motion.div
+          className="mx-auto max-w-2xl text-center space-y-8"
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
+          <p className="inline-flex items-center justify-center gap-2 rounded-full bg-accent/10 px-4 py-2 text-sm font-semibold text-accent transition-smooth hover:scale-105">
+            <Music className="h-4 w-4" />
+            Trusted by students worldwide
           </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
-            <Button size="lg" asChild className="rounded-2xl bg-primary hover:brightness-110 shadow-xl shadow-primary/30 text-base px-8">
+          <h1 className="text-4xl font-bold leading-tight md:text-5xl">
+            Learn music, feel confident, and create your own sound.
+          </h1>
+
+          <p className="mx-auto max-w-lg text-base text-slate-600">
+            MelodyMasters makes modern music learning effortless with structured
+            courses, expert mentors, and a simple interface built for progress.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-3">
+            <Button
+              size="lg"
+              asChild
+              className="rounded-xl bg-primary text-white px-8 hover:bg-teal-600"
+            >
               <Link href="/classes">
-                Explore Classes <ArrowRight className="ml-1 h-4 w-4" />
+                Browse Classes <ArrowRight className="ml-1 h-4 w-4" />
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="rounded-2xl border-white/20 bg-white/5 hover:bg-white/10 text-white text-base px-8">
+            <Button
+              size="lg"
+              variant="outline"
+              asChild
+              className="rounded-xl border border-slate-300 px-8 text-slate-700 hover:bg-slate-100"
+            >
               <Link href="/instructors">Meet Instructors</Link>
             </Button>
           </div>
 
-          {/* Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-8 pt-6 border-t border-white/10">
+          <div className="flex flex-wrap justify-center gap-5 border-t border-slate-200 pt-6 text-sm text-slate-500">
             {stats.map(({ icon: Icon, value, label }) => (
-              <div key={label} className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/20">
-                  <Icon className="h-5 w-5 text-teal-400" />
+              <div key={label} className="flex items-center gap-2">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/15 text-primary">
+                  <Icon className="h-4 w-4" />
                 </div>
-                <div className="text-left">
-                  <div className="text-xl font-black">{value}</div>
-                  <div className="text-xs text-slate-400">{label}</div>
+                <div>
+                  <p className="text-base font-bold text-slate-800">{value}</p>
+                  <p>{label}</p>
                 </div>
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

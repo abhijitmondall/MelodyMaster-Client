@@ -64,28 +64,22 @@ export default function SignupPage() {
   });
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-teal-950 p-4 py-12">
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-primary/20 blur-3xl" />
-        <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-teal-400/10 blur-3xl" />
-      </div>
-
-      <div className="relative w-full max-w-md">
-        <div className="flex items-center justify-center gap-2.5 mb-8">
-          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary shadow-xl shadow-primary/30">
-            <Music className="h-6 w-6 text-primary-foreground" />
+    <div className="min-h-screen flex items-center justify-center bg-slate-50 p-4 py-10">
+      <div className="relative w-full max-w-lg">
+        <div className="flex items-center justify-center gap-2.5 mb-7">
+          <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
+            <Music className="h-6 w-6" />
           </div>
-          <span className="text-2xl font-black text-white tracking-tight">
+          <span className="text-2xl font-black text-slate-900 tracking-tight">
             MelodyMasters
           </span>
         </div>
-
-        <Card className="shadow-2xl border-0">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-2xl font-black">
+        <Card className="rounded-3xl border border-slate-200 bg-white shadow-lg">
+          <CardHeader className="border-b border-slate-100 pb-5">
+            <CardTitle className="text-2xl font-bold text-slate-900">
               Create your account
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-500">
               Join thousands of music lovers worldwide
             </CardDescription>
           </CardHeader>

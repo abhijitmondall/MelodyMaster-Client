@@ -125,11 +125,11 @@ export default function MyClassesPage() {
             <Card key={cls.id} className="overflow-hidden">
               <div className="relative h-40 bg-gradient-to-br from-teal-50 to-emerald-100">
                 {cls.classImage ? (
-                  <Image
+                  <img
                     src={cls.classImage}
                     alt={cls.className}
-                    fill
-                    className="object-cover"
+                    // fill
+                    className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-500"
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center">

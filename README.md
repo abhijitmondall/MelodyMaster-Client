@@ -6,11 +6,11 @@ A full-stack music class booking and management platform where students can brow
 
 ## 🌐 Live URLs
 
-| Service           | URL                                           |
-| ----------------- | --------------------------------------------- |
-| Frontend (Client) | `https://your-frontend-url.vercel.app`        |
-| Backend (API)     | `https://your-backend-url.railway.app`        |
-| API Health Check  | `https://your-backend-url.railway.app/health` |
+| Service           | URL                                          |
+| ----------------- | -------------------------------------------- |
+| Frontend (Client) | `https://melodymaster-app.vercel.app`        |
+| Backend (API)     | `https://melodymaster-api.vercel.app`        |
+| API Health Check  | `https://melodymaster-api.vercel.app/health` |
 
 > Replace the placeholders above with your actual deployed URLs.
 

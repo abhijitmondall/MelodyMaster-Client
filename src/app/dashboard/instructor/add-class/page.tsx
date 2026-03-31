@@ -73,6 +73,7 @@ export default function AddClassPage() {
     onSubmit: async ({ value }) => {
       if (!user) return;
       setError("");
+      console.log("SUBMIT VALUES:", value);
       mutation.mutate({
         className: value.className,
         classImage: value.classImage || undefined,
@@ -203,7 +204,9 @@ export default function AddClassPage() {
                         onChange={(e) => {
                           const v =
                             type === "number"
-                              ? parseFloat(e.target.value) || 0
+                              ? isNaN(e.target.valueAsNumber)
+                                ? 0
+                                : e.target.valueAsNumber
                               : e.target.value;
                           field.handleChange(v as never);
                         }}
